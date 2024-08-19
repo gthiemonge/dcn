@@ -17,7 +17,7 @@ pushd $CIFMW
 export N=2
 echo -e "localhost ansible_connection=local\n[computes]" > inventory.yml
 for I in $(seq $START $((N+$START))); do
-    echo 192.168.122.${I} ansible_ssh_private_key_file=/home/zuul/.ssh/id_cifw >> inventory.yml
+    echo compute-$((I-100)) ansible_host=192.168.122.${I} ansible_ssh_private_key_file=/home/zuul/.ssh/id_cifw >> inventory.yml
 done
 export ANSIBLE_REMOTE_USER=zuul
 export ANSIBLE_SSH_PRIVATE_KEY=~/.ssh/id_cifw
