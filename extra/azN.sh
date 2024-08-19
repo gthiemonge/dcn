@@ -46,16 +46,16 @@ if [[ $? -gt 0 ]]; then
 fi
 
 export ARCH=~/src/github.com/openstack-k8s-operators/architecture
+export CEPH_SECRET_FILE=~/ceph_secret.yaml
+# Identify current control plane CR (before deploying another control plane)
+export CONTROL_PLANE_CR_FILE=~/control-plane-cr.yaml
 
 if [ $SETUP_PREV -eq 1 ]; then
     # Identify current ceph secret file (before deploying another ceph cluster)
-    export CEPH_SECRET_FILE=~/ceph_secret.yaml
     oc get Secret ceph-conf-files -o yaml \
         | yq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid)' \
              > $CEPH_SECRET_FILE
 
-    # Identify current control plane CR (before deploying another control plane)
-    export CONTROL_PLANE_CR_FILE=~/control-plane-cr.yaml
     # Look at the previous N
     POST_CEPH_SRC=$ARCH/examples/va/hci/nodeset-post-ceph-azN.yaml
     if [[ ! -e $POST_CEPH_SRC ]]; then
